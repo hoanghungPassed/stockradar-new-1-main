@@ -1,0 +1,26 @@
+# Build output
+.next/
+out/
+
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env & local configs
+.env*
+!.env.example
+.vercel/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+firebase-debug.log
+google-auth-web/
+
+.vercel
