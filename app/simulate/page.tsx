@@ -1,23 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { logEvent, getAnalytics, isSupported } from "firebase/analytics";
-import app from "../../lib/firebase"; // dùng default export từ firebase.ts
+import { logEvent } from "firebase/analytics";
+import { initAnalytics } from "../../lib/firebase";
 
 export default function SimulatePage() {
   const [status, setStatus] = useState("⏳ Đang khởi tạo Firebase Analytics...");
 
   useEffect(() => {
     const sendEvents = async () => {
+      const analytics = await initAnalytics();
+      if (!analytics) {
+        setStatus("⚠️ Firebase Analytics chưa sẵn sàng.");
+        return;
+      }
+
       try {
-        const supported = await isSupported();
-        if (!supported) {
-          setStatus("⚠️ Trình duyệt không hỗ trợ Firebase Analytics.");
-          return;
-        }
-
-        const analytics = getAnalytics(app);
-
         for (let i = 1; i <= 1050; i++) {
           logEvent(analytics, "click", { element: `button_${i % 10}` });
         }

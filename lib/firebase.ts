@@ -21,20 +21,21 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // 🔐 Auth & Firestore
 export const auth = getAuth(app);
-export const db = getFirestore(app); // ✅ phải có dòng này
+export const db = getFirestore(app);
 
-// 📊 Analytics (chỉ chạy ở client)
-export let analytics: any = null;
+// 📊 Hàm khởi tạo Analytics (chỉ chạy ở client)
+export const initAnalytics = async () => {
+  if (typeof window === "undefined") return null;
 
-if (typeof window !== "undefined") {
-  isSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-      console.log("✅ Firebase Analytics đã bật!");
-    } else {
-      console.warn("⚠️ Trình duyệt không hỗ trợ Analytics.");
-    }
-  });
-}
+  const supported = await isSupported();
+  if (!supported) {
+    console.warn("⚠️ Trình duyệt không hỗ trợ Firebase Analytics.");
+    return null;
+  }
+
+  const analytics = getAnalytics(app);
+  console.log("✅ Firebase Analytics đã bật!");
+  return analytics;
+};
 
 export default app;
